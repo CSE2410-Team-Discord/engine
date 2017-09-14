@@ -2,6 +2,8 @@
 
 # PlayCanvas WebGL Game Engine
 
+Currently being worked on by Team Discord from Florida Tech as part of the CSE2410 Intro Software Engineering class.
+
 PlayCanvas is an open-source game engine. It uses HTML5 and WebGL to run games and other interactive 3D content in all modern browsers without the need for a plugin.
 
 ## Project Showcase

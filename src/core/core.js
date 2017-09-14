@@ -3,6 +3,7 @@
  * @namespace
  * @description Root namespace for the PlayCanvas Engine
  * @preserve PlayCanvas Engine v__CURRENT_SDK_VERSION__ revision __REVISION__
+ * Currently being worked on by Team Discord from Florida Tech as part of the CSE2410 Intro Software Engineering class.
  * http://playcanvas.com
  * Copyright 2011-2017 PlayCanvas Ltd. All rights reserved.
 // #ifdef DEBUG
