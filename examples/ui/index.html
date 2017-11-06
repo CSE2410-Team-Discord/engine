@@ -140,6 +140,7 @@
                     height: 64,
                     type: "text",
                     text: text,
+                    smartWrap: true,
                     fontAsset: fontAsset,
                     color: new pc.Color(1,1,1),
                     opacity: 0.5
@@ -216,12 +217,12 @@
                     textureAsset: panelAsset
                 });
 
-                button = createButton("START", 0, -22, function () {
+                button = createButton("Testing line length with wrap", 0, -22, function () {
                     showGame();
                 });
                 panel.addChild(button);
 
-                button = createButton("ANNOY", 0, -108, function () {
+                button = createButton("One Line", 0, -108, function () {
                     toggleSpin();
                 });
                 panel.addChild(button);

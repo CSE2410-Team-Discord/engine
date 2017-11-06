@@ -22,9 +22,9 @@ pc.extend(pc, function () {
         this._autoWidth = true;
         this._autoHeight = true;
 
+        this._smartWrap = false;
         this.width = 0;
         this.height = 0;
-
         // private
         this._node = new pc.GraphNode();
         this._model = null;
@@ -197,7 +197,8 @@ pc.extend(pc, function () {
             this._updateMesh(mesh, text);
             return mesh;
         },
-
+        //WHY THE HELL DONT YOU HAVE COMMENTS
+        //TODO: ADD COMMENTS FUCKERS
         _updateMesh: function (mesh, text) {
             var json = this._font.data;
             var vb = mesh.vertexBuffer;
@@ -231,6 +232,7 @@ pc.extend(pc, function () {
             var fontMinY = 0;
             var fontMaxY = 0;
             var scale = 1;
+            //WHAT IS MAGIC, NOT THIS SHIT
             var MAGIC = 32;
 
             for (var char in json.chars) {
@@ -244,7 +246,7 @@ pc.extend(pc, function () {
 
             for (var i = 0; i < l; i++) {
                 var char = text.charCodeAt(i);
-
+                //ILL ACTUALLY COMMENT!!! SO FOR FUTURE PEEPS, char 10 and 13 are basically \n so when i see this auto break line.
                 if (char === 10 || char === 13) {
                     // add forced line-break
                     _y -= this._lineHeight;
@@ -502,8 +504,45 @@ pc.extend(pc, function () {
             if (this._model && this._system.app.scene.containsModel(this._model)) {
                 this._system.app.scene.removeModel(this._model);
             }
+        },
+
+        _createSmartWrap: function () {
+            var textLength = this._text.length;
+            var fontSize = this._fontSize;
+            var text = this._text;
+            if((fontSize * textLength) > this._element.width) {
+                if((((this._element.width / fontSize) / 2) * fontSize) > this._element.height) {
+                    fontSize = (fontSize * (this._element.height / (((this._element.width / fontSize) / 2) * fontSize)));
+                }
+                var breakLines = (this._element.width / fontSize);
+                var newText = "";
+                for (var i = 0; i < textLength; i++) {
+                    newText = newText + text.charAt(i);
+                    if(((i % breakLines) === 0) && (i !== 0)) {
+                        if(text.charAt(i) !== ' ') {
+                            for(var j = i; j > 0; j--) {
+                                console.log(newText.charAt(j))
+                                if(newText.charAt(j) === ' ') {
+                                    var before = newText.slice(0, j);
+                                    var after = newText.slice(j, newText.length);
+                                    newText = before + '\n' + after;
+                                    break;
+                                }
+                            }
+                        } else {
+                            newText = newText + '\n';
+                        }
+                    }
+                }
+                this._lineHeight = fontSize;
+                this._fontSize = fontSize;
+                if (this._font) {
+                    this._updateText(newText);
+                }
+                this._text = newText;
+            }
         }
-    });
+});
 
     Object.defineProperty(TextElement.prototype, "text", {
         get: function () {
@@ -690,6 +729,18 @@ pc.extend(pc, function () {
         }
     });
 
+    Object.defineProperty(TextElement.prototype, "smartWrap", {
+        get: function () {
+            return this._smartWrap;
+        },
+
+        set: function (value) {
+            this._smartWrap = value;
+            if(this._smartWrap) {
+                this._createSmartWrap();
+            }
+        }
+    });
     return {
         TextElement: TextElement
     };

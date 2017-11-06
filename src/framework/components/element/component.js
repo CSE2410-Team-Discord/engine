@@ -949,6 +949,7 @@ pc.extend(pc, function () {
     _define("alignment");
     _define("autoWidth");
     _define("autoHeight");
+    _define("smartWrap");
 
     _define("text");
     _define("texture");

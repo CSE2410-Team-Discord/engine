@@ -210,6 +210,9 @@ pc.extend(pc, function () {
                     component.fontSize = data.fontSize;
                     if (!data.lineHeight) component.lineHeight = data.fontSize;
                 }
+                if(data.smartWrap !== undefined) {
+                    component.smartWrap = data.smartWrap;
+                }
                 if (data.lineHeight !== undefined) component.lineHeight = data.lineHeight;
                 if (data.fontAsset !== undefined) component.fontAsset = data.fontAsset;
                 if (data.font !== undefined) component.font = data.font;
@@ -259,6 +262,7 @@ pc.extend(pc, function () {
                 spacing: source.spacing,
                 lineHeight: source.lineHeight,
                 fontSize: source.fontSize,
+                smartWrap: source.smartWrap,
                 fontAsset: source.fontAsset,
                 font: source.font,
                 useInput: source.useInput
