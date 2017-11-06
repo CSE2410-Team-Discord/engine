@@ -197,8 +197,7 @@ pc.extend(pc, function () {
             this._updateMesh(mesh, text);
             return mesh;
         },
-        //WHY THE HELL DONT YOU HAVE COMMENTS
-        //TODO: ADD COMMENTS FUCKERS
+
         _updateMesh: function (mesh, text) {
             var json = this._font.data;
             var vb = mesh.vertexBuffer;
@@ -232,7 +231,6 @@ pc.extend(pc, function () {
             var fontMinY = 0;
             var fontMaxY = 0;
             var scale = 1;
-            //WHAT IS MAGIC, NOT THIS SHIT
             var MAGIC = 32;
 
             for (var char in json.chars) {
