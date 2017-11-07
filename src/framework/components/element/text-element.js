@@ -22,7 +22,9 @@ pc.extend(pc, function () {
         this._autoWidth = true;
         this._autoHeight = true;
 
+        //SmartWrap Property
         this._smartWrap = false;
+
         this.width = 0;
         this.height = 0;
         // private
@@ -504,19 +506,27 @@ pc.extend(pc, function () {
             }
         },
 
+        /**
+         * Function to smartWrap text when the property is toggled true
+         */
         _createSmartWrap: function () {
+            //Grabs the length, font and text data
             var textLength = this._text.length;
             var fontSize = this._fontSize;
             var text = this._text;
+            //If the text length would exceed the width, wrap it
             if((fontSize * textLength) > this._element.width) {
+                //Adjust font size based on how many lines are needed to wrap the text
                 if((((this._element.width / fontSize) / 2) * fontSize) > this._element.height) {
                     fontSize = (fontSize * (this._element.height / (((this._element.width / fontSize) / 2) * fontSize)));
                 }
                 var breakLines = (this._element.width / fontSize);
                 var newText = "";
+                //Go through the text adding new lines when a wrap is needed
                 for (var i = 0; i < textLength; i++) {
                     newText = newText + text.charAt(i);
                     if(((i % breakLines) === 0) && (i !== 0)) {
+                        //If the position is not a space, go to the previous space and add the newline character
                         if(text.charAt(i) !== ' ') {
                             for(var j = i; j > 0; j--) {
                                 console.log(newText.charAt(j))
@@ -532,8 +542,10 @@ pc.extend(pc, function () {
                         }
                     }
                 }
+                //Update fontsize and lineheight
                 this._lineHeight = fontSize;
                 this._fontSize = fontSize;
+                //Update text
                 if (this._font) {
                     this._updateText(newText);
                 }
@@ -727,13 +739,18 @@ pc.extend(pc, function () {
         }
     });
 
+    /**
+     * Function to define the smartWrap property
+     */
     Object.defineProperty(TextElement.prototype, "smartWrap", {
+        //Returns the given property
         get: function () {
             return this._smartWrap;
         },
-
+        //Sets the property
         set: function (value) {
             this._smartWrap = value;
+            //If true, call the smart wrap function
             if(this._smartWrap) {
                 this._createSmartWrap();
             }
