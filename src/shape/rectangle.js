@@ -1,5 +1,10 @@
 pc.extend(pc, function () {
 	var tmpVecA = new pc.Vec3();
+	var tmpVecB = new pc.Vec3();
+	var tmpVecC = new pc.Vec3();
+	var tmpVecD = new pc.Vec3();
+	var tmpVecE = new pc.Vec3();
+	var tmpVecF = new pc.Vec3();
 
 	/**
 	 * @name pc.Rectangle
@@ -157,9 +162,94 @@ pc.extend(pc, function () {
 			},
 
 			_intersectsRay: function(ray, point) {
+				var tMin = tmpVecA.copy(this.getMin()).sub(ray.origin).data;
+				var tMax = tmpVecB.copy(this.getMax()).sub(ray.origin).data;
+				var dir = ray.direction.data;
 				
+				//Ensure no division by zero.
+				for(var i = 0; i < 3; i++) {
+					if(dir[i] === 0) {
+						tMin[i] = tMin[i] < 0 ? -Number.MAX_VALUE : Number.MAX_VALUE;
+	                    tMax[i] = tMax[i] < 0 ? -Number.MAX_VALUE : Number.MAX_VALUE;
+	                } else {
+	                    tMin[i] /= dir[i];
+	                    tMax[i] /= dir[i];
+	                }
+				}
+
+				var realMin = tmpVecC.set(Math.min(tMin[0], tMax[0]), Math.min(tMin[1], tMax[1]), Math.min(tMin[2], tMax[2])).data;
+	            var realMax = tmpVecD.set(Math.max(tMin[0], tMax[0]), Math.max(tMin[1], tMax[1]), Math.max(tMin[2], tMax[2])).data;
+
+	            var minMax = Math.min(Math.min(realMax[0], realMax[1]), realMax[2]);
+	            var maxMin = Math.max(Math.max(realMin[0], realMin[1]), realMin[2]);
+
+	            var intersects = minMax >= maxMin && maxMin >= 0;
+
+	            if(intersects) {
+	            	point.copy(ray.direction).scale(maxMin).add(ray.origin);
+	            }
+
+	            return intersects;
 			},
 
+			_fastIntersectsRay: function (ray) {
+				var diff = tmpVecA;
+				var cross = tmpVecB;
+				var prod = tmpVecC;
+				var absDiff = tmpVecD;
+				var absDir = tmpVecE;
+				var rayDir = ray.direction;
+				var i;
+
+				diff.sub2(ray.origin, this.center);
+				absDiff.set(Math.abs(diff.x), Math.abs(diff.y), Math.abs(diff.z));
+
+				prod.mul2(diff, rayDir);
+
+				if(absDiff.x > this.halfExtents.x && prod.x >= 0){
+					return false;
+				}
+	
+				if(absDiff.y > this.halfExtents.y && prod.y >= 0){
+					return false;
+				}
+
+				if(absDiff.z > this.halfExtents.z && prod.z >= 0){
+					return false;
+				}
+
+				absDir.set(Math.abs(rayDir.x), Math.abs(rayDir.y), Math.abs(rayDir.z));
+				cross.cross(rayDir, diff);
+				cross.set(Math.abs(cross.x), Math.abs(cross.y), Math.abs(cross.z));
+	
+				if (cross.x > this.halfExtents.y * absDir.z + this.halfExtents.z * absDir.y)
+	                return false;
+
+	            if (cross.y > this.halfExtents.x * absDir.z + this.halfExtents.z * absDir.x)
+	                return false;
+
+	            if (cross.z > this.halfExtents.x * absDir.y + this.halfExtents.y * absDir.x)
+	                return false;
+
+	            return true;
+			},
+
+			/**
+			 * @function
+			 * @name pc.Rectangle#intersectsRay
+			 * @description Test if a ray intersects with the Rectangle
+			 * @param {pc.Ray} ray Ray to test against (direction must be normalized).
+			 * @param {pc.Vec3} [point] If there is an intersection, the intersection point will be copied into here.
+			 * @returns {Boolean} True if there is an intersection, false otherwise.
+			 */
+			intersectsRay: function (ray, point) {
+				if (point) {
+					return this._intersectsRay(ray, point);
+				} else {
+					return this._fastIntersectsRay(ray);
+				}
+			},
+			
 			setMinMax: function(min, max) {
 				this.center.add2(max, min).scale(0.5);
 				this.halfExtents.sub2(max, min).scale(0.5);
@@ -168,7 +258,7 @@ pc.extend(pc, function () {
 			/**
 			 * @function
 			 * @name pc.Rectangle#getMin
-			 * @description Return the minimum corner of the AABB.
+			 * @description Return the minimum corner of the Rectangle.
 			 * @returns {pc.Vec3} minimum corner.
 			 */
 			getMin: function() {
@@ -178,7 +268,7 @@ pc.extend(pc, function () {
 			/**
 			 * @function
 			 * @name pc.Rectangle#getMax
-			 * @description Return the maximum corner of the AABB.
+			 * @description Return the maximum corner of the Rectangle.
 			 * @returns {pc.Vec3} maximum corner.
 			 */
 			getMax: function() {
@@ -188,9 +278,9 @@ pc.extend(pc, function () {
 			/**
 			 * @function
 			 * @name pc.Rectangle#containsPoint
-			 * @description Test if a point is inside a AABB.
+			 * @description Test if a point is inside a Rectangle.
 			 * @param {pc.Vec3} point Point to test.
-			 * @returns {Boolean} true if the point is inside the AABB and false otherwise.
+			 * @returns {Boolean} true if the point is inside the Rectangle and false otherwise.
 			 */
 			containsPoint: function (point) {
 				var min = this.getMin();
@@ -208,12 +298,46 @@ pc.extend(pc, function () {
 			/**
 			 * @function
 			 * @name pc.Rectangle#intersectsBoundingSphere
-			 * @description Test if a Bounding Sphere is overlapping or enveloping this AABB.
+			 * @description Test if a Bounding Sphere is overlapping or enveloping this Rectangle.
 			 * @param {pc.BoundingSphere} sphere Bounding Sphere to test.
 			 * @returns {Boolean} true if the Bounding Sphere is overlapping or enveloping and false otherwise.
 			 */
 			intersectsBoundingSphere: function(sphere) {
-				
+				var sq = this._distanceToBoundingSphereSq(sphere);
+				if(sq <= sphere.radius * sphere.radius) {
+					return true;
+				}
+
+				return false;
+			},
+
+			_distanceToBoundingSphereSq: function (sphere){
+				var rectMin = this.getMin();
+				var rectMax = this.getMax();
+
+				var sq = 0;
+
+				for (var i = 0; i < 3; ++i){
+					var out = 0;
+					var pn = sphere.center.data[i];
+					var bMin = rectMin.data[i];
+					var bMax = boxMax.data[i];
+					var val = 0;
+
+					if(pn < bMin) {
+						val = (bMin - pn);
+						out += val * val;
+					}
+
+					if(pn > bMax) {
+						val = (pn - bMax);
+						out += val * val;
+					}
+
+					sq += out;
+				}
+
+				return sq;
 			}
 	};
 
