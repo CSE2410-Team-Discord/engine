@@ -72,6 +72,26 @@ pc.extend(pc, function () {
 
         /**
          * @function
+         * @name pc.BoundingSphere#getCenter
+         * @description Return the center of the sphere.
+         * @returns {pc.Vec3} center.
+         */
+        getCenter: function() {
+        	return this.center.copy(this.center);
+        },
+
+        /**
+         * @function
+         * @name pc.BoundingSphere#getRadius
+         * @description Return the radius of the sphere.
+         * @returns {Number} radius.
+         */
+        getRadius: function() {
+        	return this.radius.copy(this.radius);
+        },
+
+        /**
+         * @function
          * @name pc.BoundingSphere#intersectsRay
          * @description Test if a ray intersects with the sphere.
          * @param {pc.Ray} ray Ray to test against (direction must be normalized).
@@ -117,6 +137,17 @@ pc.extend(pc, function () {
             }
 
             return false;
+        },
+
+        /**
+         * @function
+         * @name pc.BoundingSphere#intersectsBoundingBox
+         * @description Test if a Bounding Box is overlapping, enveloping, or inside this Bounding Sphere.
+         * @param {pc.BoundingBox} bBox Bounding Box to test.
+         * @returns {Boolean} true if the Bounding Box is overlapping, enveloping, or inside this Bounding Sphere and false otherwise.
+         */
+        intersectsBoundingBox: function (bBox) {
+        	return bBox.intersectsBoundingSphere(this);
         }
     };
 

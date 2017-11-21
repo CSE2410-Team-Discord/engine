@@ -87,11 +87,13 @@ pc.extend(pc, function () {
         /**
          * @function
          * @name pc.BoundingBox#intersects
+         * @deprecated Replaced by pc.BoundingBox#intersectsBoundingBox.
          * @description Test whether two axis-aligned bounding boxes intersect.
          * @param {pc.BoundingBox} other Bounding box to test against.
          * @returns {Boolean} True if there is an intersection.
          */
         intersects: function (other) {
+        	console.warn("DEPRECATED: intersects() use intersectsBoundingBox() instead");
             var aMax = this.getMax();
             var aMin = this.getMin();
             var bMax = other.getMax();
@@ -100,6 +102,24 @@ pc.extend(pc, function () {
             return (aMin.x <= bMax.x) && (aMax.x >= bMin.x) &&
                    (aMin.y <= bMax.y) && (aMax.y >= bMin.y) &&
                    (aMin.z <= bMax.z) && (aMax.z >= bMin.z);
+        },
+
+        /**
+         * @function
+         * @name pc.BoundingBox#intersectsBoundingBox
+         * @description Test whether two axis-aligned bounding boxes intersect.
+         * @param {pc.BoundingBox} other Bounding Box to test against.
+         * @returns {Boolean} True if there is an intersection, false otherwise.
+         */
+        intersectsBoundingBox: function (other) {
+        	var aMax = this.getMax();
+        	var aMin = this.getMin();
+        	var bMax = other.getMax();
+        	var bMin = other.getMin();
+
+        	return (aMin.x <= bMax.x) && (aMax.x >= bMin.x) &&
+        		   (aMin.y <= bMax.y) && (aMax.y >= bMin.y) &&
+        		   (aMin.z <= bMax.z) && (aMax.z >= bMin.z);
         },
 
         _intersectsRay: function (ray, point) {
@@ -210,6 +230,26 @@ pc.extend(pc, function () {
          */
         getMax: function () {
             return this._max.copy(this.center).add(this.halfExtents);
+        },
+
+        /**
+         * @function
+         * @name pc.BoundingBox#getCenter
+         * @description Return the center of the AABB.
+         * @returns {pc.Vec3} center.
+         */
+        getCenter: function () {
+        	return this.center.copy(this.center);
+        },
+
+        /**
+         * @function
+         * @name pc.BoundingBox#getHalfExtents
+         * @description Return the halfExtents of the AABB.
+         * @returns {pc.Vec3} halfExtents.
+         */
+        getHalfExtents: function () {
+        	return this.halfExtents.copy(this.halfExtents);
         },
 
         /**
