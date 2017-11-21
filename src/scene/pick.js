@@ -180,7 +180,8 @@ pc.extend(pc, function () {
                 type = mesh.primitive[pc.RENDERSTYLE_SOLID].type;
                 var isSolid = (type === pc.PRIMITIVE_TRIANGLES) || (type === pc.PRIMITIVE_TRISTRIP) || (type === pc.PRIMITIVE_TRIFAN);
                 var isPickable = (material instanceof pc.StandardMaterial) || (material instanceof pc.BasicMaterial);
-                if (isSolid && isPickable) {
+                var notPickable = (material instanceof pc.ParticleEmitter);
+                if (isSolid && !notPickable) {
 
                     device.setBlending(false);
                     device.setCullMode(material.cull);
