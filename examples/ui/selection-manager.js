@@ -68,7 +68,7 @@ SelectionManager.prototype = {
             this._rect.width = 0;
             this._rect.height = 0;
         }
-
+        this._picker.pickerType = "disallowed";
         var results = this._picker.getSelection(this._rect);
         if (results.length > 0) {
             var meshInstance = results[0];

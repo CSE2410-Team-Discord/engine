@@ -27,7 +27,7 @@ pc.extend(pc, function () {
         this.library = device.getProgramLibrary();
 
         this.pickColor = new Float32Array(4);
-
+        this.pickerType = "allowed";
         this.scene = null;
         this.drawCalls = [ ];
 
@@ -179,9 +179,14 @@ pc.extend(pc, function () {
 
                 type = mesh.primitive[pc.RENDERSTYLE_SOLID].type;
                 var isSolid = (type === pc.PRIMITIVE_TRIANGLES) || (type === pc.PRIMITIVE_TRISTRIP) || (type === pc.PRIMITIVE_TRIFAN);
-                var isPickable = (material instanceof pc.StandardMaterial) || (material instanceof pc.BasicMaterial);
-                var notPickable = (material instanceof pc.ParticleEmitter);
-                if (isSolid && !notPickable) {
+                //Make pickable variable thats set either list depending
+
+                var pickable = {
+                    allowed : (material instanceof pc.StandardMaterial) || (material instanceof pc.BasicMaterial),
+                    disallowed : !(material instanceof pc.ParticleEmitter)
+                };
+
+                if (isSolid && pickable[this.pickerType]) {
 
                     device.setBlending(false);
                     device.setCullMode(material.cull);
