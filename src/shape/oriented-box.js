@@ -3,6 +3,8 @@ pc.extend(pc, function () {
     var tmpVec3 = new pc.Vec3();
     var tmpSphere = new pc.BoundingSphere();
     var tmpMat4 = new pc.Mat4();
+    var tmpBox = new pc.BoundingBox();
+    var tmpObb = new pc.OrientedBox();
 
     /**
      * @name pc.OrientedBox
@@ -64,6 +66,41 @@ pc.extend(pc, function () {
         	return this.halfExtents.copy(this.halfExtents);
         },
 
+        /**
+         * @function
+         * @name pc.OrientedBox#intersectsBoundingBox
+         * @description Test if a Bounding Box is overlapping, enveloping, or inside this OBB.
+         * @param {pc.BoundingBox} box Bounding Box to test.
+         * @returns {Boolean} true if the Bounding Box is overlapping, enveloping, or inside this OBB and false otherwise.
+         */
+        intersectsBoundingBox: function (box) {
+        	this._modelTransform.transformPoint(box.center, tmpBox.center);
+        	tmpBox.halfExtents = box.halfExtents;
+
+        	if(this._aabb.intersectsBoundingBox(tmpBox)) {
+        		return true;
+        	}
+
+        	return false;
+        }
+
+        /**
+         * @function
+         * @name pc.OrientedBox#intersectsOrientedBox
+         * @description Test if an Oriented Box is overlapping, enveloping, or inside this OBB.
+         * @param {pc.OrientedBox} obb Oriented Box to test.
+         * @returns {Boolean} true if the Oriented Box is overlapping, enveloping, or inside this OBB and false otherwise.
+         */
+        intersectsOrientedBox: function (obb) {
+        	this._modelTransform.transformPoint(obb.center, tmpObb.center);
+        	tmpObb._aabb = obb._aabb;
+
+        	if(this._aabb.intersectsBoundingBox(tmpObb._aabb)){
+        		return true;
+        	}
+
+        	return false;
+        }
         /**
          * @function
          * @name pc.OrientedBox#intersectsBoundingSphere

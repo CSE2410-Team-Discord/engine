@@ -149,6 +149,17 @@ pc.extend(pc, function () {
         intersectsBoundingBox: function (bBox) {
         	return bBox.intersectsBoundingSphere(this);
         }
+
+        /**
+         * @function
+         * @name pc.BoundingSphere#intersectsOrientedBox
+         * @description Test if an Oriented Box is overlapping, enveloping, or inside this Bounding Sphere.
+         * @param {pc.OrientedBox} obb Oriented Box to test.
+         * @returns {Boolean} true if the Oriented Box is overlapping, enveloping, or inside this Bounding Sphere and false otherwise.
+         */
+        intersectsOrientedBox: function (obb) {
+        	return obb.intersectsBoundingSphere(this);
+        }
     };
 
     return {

@@ -342,6 +342,16 @@ pc.extend(pc, function () {
 
         /**
          * @function
+         * @name pc.BoundingBox#intersectsOrientedBox
+         * @description Test if an Oriented Box is overlapping, enveloping, or inside this AABB.
+         * @param {pc.OrientedBox} obb Oriented Box to test.
+         * @returns {Boolean} true if the Oriented Box is overlapping, enveloping, or inside this AABB and false otherwise.
+         */
+        intersectsOrientedBox: function (obb) {
+        	return obb.intersectsBoundingBox(this);
+        }
+        /**
+         * @function
          * @name pc.BoundingBox#intersectsBoundingSphere
          * @description Test if a Bounding Sphere is overlapping, enveloping, or inside this AABB.
          * @param {pc.BoundingSphere} sphere Bounding Sphere to test.
