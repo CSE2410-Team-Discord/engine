@@ -739,6 +739,11 @@ pc.extend(pc, function () {
          * @param {Number} dt The time delta since the last frame.
          */
         update: function (dt) {
+            if(dt === 0) {
+                console.warn(dt);
+                return;
+            }
+
             this.graphicsDevice.updateClientRect();
 
             if (this.vr) this.vr.poll();
