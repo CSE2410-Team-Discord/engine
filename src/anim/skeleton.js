@@ -83,14 +83,16 @@ pc.extend(pc, function () {
 
             // Step the current time and work out if we need to jump ahead, clamp or wrap around
             this._time += delta;
-
+            // If the animation has gone over the total time of the animation
             if (this._time > duration) {
                 this._time = this.looping ? 0.0 : duration;
+                // Reset all keyframe nodes to original keyframes
                 for (i = 0; i < nodes.length; i++) {
                     node = nodes[i];
                     nodeName = node._name;
                     this._currKeyIndices[nodeName] = 0;
                 }
+            // If the time has gone below 0 or has somehow recieved an incorrect value, reset
             } else if (this._time < 0) {
                 this._time = this.looping ? duration : 0.0;
                 for (i = 0; i < nodes.length; i++) {
