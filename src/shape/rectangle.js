@@ -14,7 +14,7 @@ pc.extend(pc, function () {
 	 * @param {pc.Vec3} [halfExtents] Half the distance across the rectangle in each axis. The constructor takes a reference of this parameter.
 	 */
 	var Rectangle = function Rectangle(center, halfExtents) {
-		this.cetner = center || new pc.Vec3(0, 0, 0);
+		this.center = center || new pc.Vec3(0, 0, 0);
 		this.halfExtents = halfExtents || new pc.Vec3(0.5, 0.5, 0);
 		this._min = new pc.Vec3();
 		this._max = new pc.Vec3();
@@ -144,7 +144,7 @@ pc.extend(pc, function () {
 			},
 
 			/**
-			 * @function MAY CHANGE DUE TO INTERACTION, NEED TO SEE WHAT MAX IS FIRST
+			 * @function
 			 * @name pc.Rectangle#intersects
 			 * @description Test whether two axis-aligned rectangles intersect.
 			 * @param {pc.Rectangle} other Rectangle to test against.
