@@ -84,6 +84,7 @@ pc.extend(pc, function() {
      * @property {Boolean} lighting If enabled, particles will be lit by ambient and directional lights.
      * @property {Boolean} halfLambert Enabling Half Lambert lighting avoids particles looking too flat in shadowed areas. It is a completely non-physical lighting model but can give more pleasing visual results.
      * @property {Boolean} alignToMotion Orient particles in their direction of motion.
+     * @property {Boolean} autoPlay If true, this will auto-play whatever is being passed through and checking this variable. If false, it will pause and remove visibility of the emitter being used.
      * @property {Boolean} depthWrite If enabled, the particles will write to the depth buffer. If disabled, the depth buffer is left unchanged and particles will be guaranteed to overwrite one another in the order in which they are rendered.
      * @property {Boolean} noFog Disable fogging
      * @property {Number} numParticles Maximum number of simulated particles.
