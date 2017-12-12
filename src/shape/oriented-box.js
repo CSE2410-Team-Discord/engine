@@ -4,7 +4,7 @@ pc.extend(pc, function () {
     var tmpSphere = new pc.BoundingSphere();
     var tmpMat4 = new pc.Mat4();
     var tmpBox = new pc.BoundingBox();
-    var tmpObb = new pc.OrientedBox();
+    //var tmpObb = new pc.OrientedBox();
 
     /**
      * @name pc.OrientedBox
@@ -73,16 +73,16 @@ pc.extend(pc, function () {
          * @param {pc.BoundingBox} box Bounding Box to test.
          * @returns {Boolean} true if the Bounding Box is overlapping, enveloping, or inside this OBB and false otherwise.
          */
-        intersectsBoundingBox: function (box) {
+        BoundingBox: function (box) {
         	this._modelTransform.transformPoint(box.center, tmpBox.center);
         	tmpBox.halfExtents = box.halfExtents;
 
-        	if(this._aabb.intersectsBoundingBox(tmpBox)) {
+        	if(this._aabb.BoundingBox(tmpBox)) {
         		return true;
         	}
 
         	return false;
-        }
+        },
 
         /**
          * @function
@@ -91,16 +91,16 @@ pc.extend(pc, function () {
          * @param {pc.OrientedBox} obb Oriented Box to test.
          * @returns {Boolean} true if the Oriented Box is overlapping, enveloping, or inside this OBB and false otherwise.
          */
-        intersectsOrientedBox: function (obb) {
+        OrientedBox: function (obb) {
         	this._modelTransform.transformPoint(obb.center, tmpObb.center);
         	tmpObb._aabb = obb._aabb;
 
-        	if(this._aabb.intersectsBoundingBox(tmpObb._aabb)){
+        	if(this._aabb.BoundingBox(tmpObb._aabb)){
         		return true;
         	}
 
         	return false;
-        }
+        },
         /**
          * @function
          * @name pc.OrientedBox#intersectsBoundingSphere
@@ -108,11 +108,11 @@ pc.extend(pc, function () {
          * @param {pc.BoundingSphere} sphere Bounding Sphere to test.
          * @returns {Boolean} true if the Bounding Sphere is overlapping, enveloping or inside this OBB and false otherwise.
          */
-        intersectsBoundingSphere: function (sphere) {
+        BoundingSphere: function (sphere) {
             this._modelTransform.transformPoint(sphere.center, tmpSphere.center);
             tmpSphere.radius = sphere.radius;
 
-            if (this._aabb.intersectsBoundingSphere(tmpSphere)) {
+            if (this._aabb.BoundingSphere(tmpSphere)) {
                 return true;
             }
 

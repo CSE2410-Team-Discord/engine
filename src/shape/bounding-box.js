@@ -347,9 +347,9 @@ pc.extend(pc, function () {
          * @param {pc.OrientedBox} obb Oriented Box to test.
          * @returns {Boolean} true if the Oriented Box is overlapping, enveloping, or inside this AABB and false otherwise.
          */
-        intersectsOrientedBox: function (obb) {
-        	return obb.intersectsBoundingBox(this);
-        }
+        OrientedBox: function (obb) {
+        	return obb.BoundingBox(this);
+        },
         /**
          * @function
          * @name pc.BoundingBox#intersectsBoundingSphere
@@ -357,7 +357,7 @@ pc.extend(pc, function () {
          * @param {pc.BoundingSphere} sphere Bounding Sphere to test.
          * @returns {Boolean} true if the Bounding Sphere is overlapping, enveloping, or inside the AABB and false otherwise.
          */
-        intersectsBoundingSphere: function (sphere) {
+        BoundingSphere: function (sphere) {
             var sq = this._distanceToBoundingSphereSq(sphere);
             if (sq <= sphere.radius * sphere.radius) {
                 return true;

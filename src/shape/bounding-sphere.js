@@ -98,7 +98,7 @@ pc.extend(pc, function () {
          * @param {pc.Vec3} [point] If there is an intersection, the intersection point will be copied into here.
          * @returns {Boolean} True if there is an intersection.
          */
-        intersectsRay: function (ray, point) {
+        Ray: function (ray, point) {
             var m = tmpVecA.copy(ray.origin).sub(this.center);
             var b = m.dot(tmpVecB.copy(ray.direction).normalize());
             var c = m.dot(m) - this.radius * this.radius;
@@ -129,7 +129,7 @@ pc.extend(pc, function () {
          * @param {pc.BoundingSphere} sphere Bounding Sphere to test.
          * @returns {Boolean} true if the Bounding Sphere is overlapping, enveloping, or inside this Bounding Sphere and false otherwise.
          */
-        intersectsBoundingSphere: function (sphere) {
+        BoundingSphere: function (sphere) {
             tmpVecA.sub2(sphere.center, this.center);
             var totalRadius = sphere.radius + this.radius;
             if (tmpVecA.lengthSq() <= totalRadius * totalRadius) {
@@ -146,9 +146,9 @@ pc.extend(pc, function () {
          * @param {pc.BoundingBox} bBox Bounding Box to test.
          * @returns {Boolean} true if the Bounding Box is overlapping, enveloping, or inside this Bounding Sphere and false otherwise.
          */
-        intersectsBoundingBox: function (bBox) {
-        	return bBox.intersectsBoundingSphere(this);
-        }
+        BoundingBox: function (bBox) {
+        	return bBox.BoundingSphere(this);
+        },
 
         /**
          * @function
@@ -157,8 +157,8 @@ pc.extend(pc, function () {
          * @param {pc.OrientedBox} obb Oriented Box to test.
          * @returns {Boolean} true if the Oriented Box is overlapping, enveloping, or inside this Bounding Sphere and false otherwise.
          */
-        intersectsOrientedBox: function (obb) {
-        	return obb.intersectsBoundingSphere(this);
+        OrientedBox: function (obb) {
+        	return obb.BoundingSphere(this);
         }
     };
 
